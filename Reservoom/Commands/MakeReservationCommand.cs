@@ -3,18 +3,19 @@ using System.Windows;
 using Reservoom.Exceptions;
 using Reservoom.Models;
 using Reservoom.Services;
+using Reservoom.Stores;
 using Reservoom.ViewModels;
 
 namespace Reservoom.Commands;
 
 public class MakeReservationCommand : AsyncCommandBase {
 	private readonly MakeReservationViewModel _makeReservationViewModel;
-	private readonly Hotel _hotel;
+	private readonly HotelStore _hotelStore;
 	private readonly NavigationService _reservationListingNavigationService;
 
-	public MakeReservationCommand(MakeReservationViewModel makeReservationViewModel, Hotel hotel, NavigationService reservationListingNavigationService) {
+	public MakeReservationCommand(MakeReservationViewModel makeReservationViewModel, HotelStore hotelStore, NavigationService reservationListingNavigationService) {
 		_makeReservationViewModel = makeReservationViewModel;
-		_hotel = hotel;
+		_hotelStore = hotelStore;
 		_reservationListingNavigationService = reservationListingNavigationService;
 
 		_makeReservationViewModel.PropertyChanged += OnViewModelPropertyChanged;
@@ -31,10 +32,11 @@ public class MakeReservationCommand : AsyncCommandBase {
 		);
 
 		try {
-			await _hotel.MakeReservation(reservation);
+			await _hotelStore.MakeReservation(reservation);
+			
 			MessageBox.Show("Successfully reserved room.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-			_reservationListingNavigationService.Navigate();
+			//_reservationListingNavigationService.Navigate();
 		} catch (ReservationConflictException) {
 			MessageBox.Show("This room is already taken.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		} catch (Exception) {

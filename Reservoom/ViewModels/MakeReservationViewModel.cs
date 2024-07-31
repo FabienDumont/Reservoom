@@ -60,8 +60,8 @@ public class MakeReservationViewModel : ViewModelBase {
 	public ICommand SubmitCommand { get; }
 	public ICommand CancelCommand { get; }
 
-	public MakeReservationViewModel(Hotel hotel, NavigationService reservationListingNavigationService) {
-		SubmitCommand = new MakeReservationCommand(this, hotel, reservationListingNavigationService);
+	public MakeReservationViewModel(HotelStore hotelStore, NavigationService reservationListingNavigationService) {
+		SubmitCommand = new MakeReservationCommand(this, hotelStore, reservationListingNavigationService);
 		CancelCommand = new NavigateCommand(reservationListingNavigationService);
 	}
 }

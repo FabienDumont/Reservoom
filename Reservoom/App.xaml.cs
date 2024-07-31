@@ -22,6 +22,7 @@ public partial class App : Application {
 	private readonly Hotel _hotel;
 	private readonly NavigationStore _navigationStore = new();
 	private readonly ReservoomDbContextFactory _reservoomDbContextFactory;
+	private readonly HotelStore _hotelStore;
 
 	public App() {
 		_reservoomDbContextFactory = new(ConnectionString);
@@ -32,6 +33,7 @@ public partial class App : Application {
 		ReservationBook reservationBook = new(reservationProvider, reservationCreator, reservationConflictValidator);
 		
 		_hotel = new Hotel("Fabibi suites", reservationBook);
+		_hotelStore = new HotelStore(_hotel);
 	}
 	
 	protected override void OnStartup(StartupEventArgs e) {
@@ -51,10 +53,10 @@ public partial class App : Application {
 	}
 
 	private MakeReservationViewModel CreateMakeReservationViewModel() {
-		return new MakeReservationViewModel(_hotel, new NavigationService(_navigationStore, CreateReservationListingViewModel));
+		return new MakeReservationViewModel(_hotelStore, new NavigationService(_navigationStore, CreateReservationListingViewModel));
 	}
 
 	private ReservationListingViewModel CreateReservationListingViewModel() {
-		return ReservationListingViewModel.LoadViewModel(_hotel, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
+		return ReservationListingViewModel.LoadViewModel(_hotelStore, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
 	}
 }
