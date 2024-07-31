@@ -1,5 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Windows.Navigation;
+using MVVMEssentials.Commands;
+using MVVMEssentials.Services;
+using MVVMEssentials.ViewModels;
 using Reservoom.Commands;
 using Reservoom.Models;
 using Reservoom.Services;
@@ -7,16 +11,26 @@ using Reservoom.Stores;
 
 namespace Reservoom.ViewModels;
 
-public class ReservationListingViewModel : ViewModelBase {
+public class ReservationListingViewModel : BaseVm {
 	private readonly HotelStore _hotelStore;
 	
 	private readonly ObservableCollection<ReservationViewModel> _reservations;
 	public IEnumerable<ReservationViewModel> Reservations => _reservations;
 
+	private bool _isLoading;
+
+	public bool IsLoading {
+		get => _isLoading;
+		set {
+			_isLoading = value;
+			OnPropertyChanged();
+		}
+	}
+
 	public ICommand LoadReservationsCommand { get; }
 	public ICommand MakeReservationCommand { get; }
 
-	public ReservationListingViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService) {
+	public ReservationListingViewModel(HotelStore hotelStore, INavigationService makeReservationNavigationService) {
 		_hotelStore = hotelStore;
 		_reservations = new ObservableCollection<ReservationViewModel>();
 
@@ -36,7 +50,7 @@ public class ReservationListingViewModel : ViewModelBase {
 		_reservations.Add(reservationViewModel);
 	}
 
-	public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, NavigationService makeReservationNavigationService) {
+	public static ReservationListingViewModel LoadViewModel(HotelStore hotelStore, INavigationService makeReservationNavigationService) {
 		ReservationListingViewModel viewModel = new(hotelStore, makeReservationNavigationService);
 		
 		viewModel.LoadReservationsCommand.Execute(null);

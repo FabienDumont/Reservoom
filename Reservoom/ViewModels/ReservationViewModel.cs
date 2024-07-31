@@ -1,8 +1,9 @@
-﻿using Reservoom.Models;
+﻿using MVVMEssentials.ViewModels;
+using Reservoom.Models;
 
 namespace Reservoom.ViewModels;
 
-public class ReservationViewModel : ViewModelBase {
+public class ReservationViewModel : BaseVm {
 	private readonly Reservation _reservation;
 
 	public string RoomId => _reservation.RoomId.ToString();

@@ -2,6 +2,8 @@
 using System.Data;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
+using MVVMEssentials.Services;
+using MVVMEssentials.Stores;
 using Reservoom.DbContexts;
 using Reservoom.Exceptions;
 using Reservoom.Models;
@@ -53,10 +55,10 @@ public partial class App : Application {
 	}
 
 	private MakeReservationViewModel CreateMakeReservationViewModel() {
-		return new MakeReservationViewModel(_hotelStore, new NavigationService(_navigationStore, CreateReservationListingViewModel));
+		return new MakeReservationViewModel(_hotelStore, new NavigationService<ReservationListingViewModel>(_navigationStore, CreateReservationListingViewModel));
 	}
 
 	private ReservationListingViewModel CreateReservationListingViewModel() {
-		return ReservationListingViewModel.LoadViewModel(_hotelStore, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
+		return ReservationListingViewModel.LoadViewModel(_hotelStore, new NavigationService<MakeReservationViewModel>(_navigationStore, CreateMakeReservationViewModel));
 	}
 }

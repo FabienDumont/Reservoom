@@ -1,5 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using System.Windows.Navigation;
+using MVVMEssentials.Commands;
+using MVVMEssentials.Services;
 using Reservoom.Exceptions;
 using Reservoom.Models;
 using Reservoom.Services;
@@ -8,12 +11,12 @@ using Reservoom.ViewModels;
 
 namespace Reservoom.Commands;
 
-public class MakeReservationCommand : AsyncCommandBase {
+public class MakeReservationCommand : BaseAsyncCommand {
 	private readonly MakeReservationViewModel _makeReservationViewModel;
 	private readonly HotelStore _hotelStore;
-	private readonly NavigationService _reservationListingNavigationService;
+	private readonly INavigationService _reservationListingNavigationService;
 
-	public MakeReservationCommand(MakeReservationViewModel makeReservationViewModel, HotelStore hotelStore, NavigationService reservationListingNavigationService) {
+	public MakeReservationCommand(MakeReservationViewModel makeReservationViewModel, HotelStore hotelStore, INavigationService reservationListingNavigationService) {
 		_makeReservationViewModel = makeReservationViewModel;
 		_hotelStore = hotelStore;
 		_reservationListingNavigationService = reservationListingNavigationService;
@@ -25,7 +28,7 @@ public class MakeReservationCommand : AsyncCommandBase {
 		return !string.IsNullOrEmpty(_makeReservationViewModel.Username) && _makeReservationViewModel.FloorNumber > 0 && base.CanExecute(parameter);
 	}
 
-	public override async Task ExecuteAsync(object? parameter) {
+	protected override async Task ExecuteAsync(object? parameter) {
 		Reservation reservation = new(
 			new RoomId(_makeReservationViewModel.FloorNumber, _makeReservationViewModel.RoomNumber), _makeReservationViewModel.Username,
 			_makeReservationViewModel.StartDate, _makeReservationViewModel.EndDate
@@ -36,7 +39,7 @@ public class MakeReservationCommand : AsyncCommandBase {
 			
 			MessageBox.Show("Successfully reserved room.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-			//_reservationListingNavigationService.Navigate();
+			_reservationListingNavigationService.Navigate();
 		} catch (ReservationConflictException) {
 			MessageBox.Show("This room is already taken.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		} catch (Exception) {

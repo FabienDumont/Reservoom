@@ -1,11 +1,12 @@
 ﻿using System.Windows;
+using MVVMEssentials.Commands;
 using Reservoom.Models;
 using Reservoom.Stores;
 using Reservoom.ViewModels;
 
 namespace Reservoom.Commands;
 
-public class LoadReservationsCommand : AsyncCommandBase {
+public class LoadReservationsCommand : BaseAsyncCommand {
 	private readonly ReservationListingViewModel _viewModel;
 	private readonly HotelStore _hotelStore;
 	
@@ -13,8 +14,10 @@ public class LoadReservationsCommand : AsyncCommandBase {
 		_viewModel = viewModel;
 		_hotelStore = hotelStore;
 	}
-	
-	public override async Task ExecuteAsync(object? parameter) {
+
+	protected override async Task ExecuteAsync(object? parameter) {
+		_viewModel.IsLoading = true;
+		
 		try {
 			await _hotelStore.Load();
 			
@@ -22,5 +25,7 @@ public class LoadReservationsCommand : AsyncCommandBase {
 		} catch (Exception e) {
 			MessageBox.Show("Failed to load reservations.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		}
+
+		_viewModel.IsLoading = false;
 	}
 }

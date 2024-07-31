@@ -1,4 +1,7 @@
 ﻿using System.Windows.Input;
+using MVVMEssentials.Commands;
+using MVVMEssentials.Services;
+using MVVMEssentials.ViewModels;
 using Reservoom.Commands;
 using Reservoom.Models;
 using Reservoom.Services;
@@ -6,7 +9,7 @@ using Reservoom.Stores;
 
 namespace Reservoom.ViewModels;
 
-public class MakeReservationViewModel : ViewModelBase {
+public class MakeReservationViewModel : BaseVm {
 	private string _username;
 
 	public string Username {
@@ -60,7 +63,7 @@ public class MakeReservationViewModel : ViewModelBase {
 	public ICommand SubmitCommand { get; }
 	public ICommand CancelCommand { get; }
 
-	public MakeReservationViewModel(HotelStore hotelStore, NavigationService reservationListingNavigationService) {
+	public MakeReservationViewModel(HotelStore hotelStore, INavigationService reservationListingNavigationService) {
 		SubmitCommand = new MakeReservationCommand(this, hotelStore, reservationListingNavigationService);
 		CancelCommand = new NavigateCommand(reservationListingNavigationService);
 	}
