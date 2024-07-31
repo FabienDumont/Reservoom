@@ -1,9 +1,14 @@
 ﻿using System.Configuration;
 using System.Data;
 using System.Windows;
+using Microsoft.EntityFrameworkCore;
+using Reservoom.DbContexts;
 using Reservoom.Exceptions;
 using Reservoom.Models;
 using Reservoom.Services;
+using Reservoom.Services.ReservationConflictValidator;
+using Reservoom.Services.ReservationCreators;
+using Reservoom.Services.ReservationProviders;
 using Reservoom.Stores;
 using Reservoom.ViewModels;
 
@@ -13,14 +18,27 @@ namespace Reservoom;
 /// Interaction logic for App.xaml
 /// </summary>
 public partial class App : Application {
+	private const string ConnectionString = "Data Source=reservoom.db";
 	private readonly Hotel _hotel;
 	private readonly NavigationStore _navigationStore = new();
+	private readonly ReservoomDbContextFactory _reservoomDbContextFactory;
 
 	public App() {
-		_hotel = new Hotel("Fabibi suites");
+		_reservoomDbContextFactory = new(ConnectionString);
+		IReservationProvider reservationProvider = new DatabaseReservationProvider(_reservoomDbContextFactory);
+		IReservationCreator reservationCreator = new DatabaseReservationCreator(_reservoomDbContextFactory);
+		IReservationConflictValidator reservationConflictValidator = new DatabaseReservationConflictValidator(_reservoomDbContextFactory);
+		
+		ReservationBook reservationBook = new(reservationProvider, reservationCreator, reservationConflictValidator);
+		
+		_hotel = new Hotel("Fabibi suites", reservationBook);
 	}
 	
 	protected override void OnStartup(StartupEventArgs e) {
+		using (ReservoomDbContext dbContext = _reservoomDbContextFactory.CreateDbContext()) {
+			dbContext.Database.Migrate();
+		}
+		
 		_navigationStore.CurrentViewModel = CreateReservationListingViewModel();
 		
 		MainWindow = new MainWindow {
@@ -37,6 +55,6 @@ public partial class App : Application {
 	}
 
 	private ReservationListingViewModel CreateReservationListingViewModel() {
-		return new ReservationListingViewModel(_hotel, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
+		return ReservationListingViewModel.LoadViewModel(_hotel, new NavigationService(_navigationStore, CreateMakeReservationViewModel));
 	}
 }

@@ -6,18 +6,18 @@ public class Hotel {
 	private readonly ReservationBook _reservationBook;
 	public string Name { get; }
 
-	public Hotel(string name) {
+	public Hotel(string name, ReservationBook reservationBook) {
 		Name = name;
 
-		_reservationBook = new ReservationBook();
+		_reservationBook = reservationBook;
 	}
 
 	/// <summary>
 	/// Get all reservations.
 	/// </summary>
 	/// <returns>All reservations in the hotel reservation book.</returns>
-	public IEnumerable<Reservation> GetAllReservations() {
-		return _reservationBook.GetAllReservations();
+	public async Task<IEnumerable<Reservation>> GetAllReservations() {
+		return await _reservationBook.GetAllReservations();
 	}
 
 	/// <summary>
@@ -25,7 +25,7 @@ public class Hotel {
 	/// </summary>
 	/// <param name="reservation">The incoming reservation.</param>
 	/// <exception cref="ReservationConflictException">Thrown if incoming reservation conflicts with existing reservation.</exception>
-	public void MakeReservation(Reservation reservation) {
-		_reservationBook.AddReservation(reservation);
+	public async Task MakeReservation(Reservation reservation) {
+		await _reservationBook.AddReservation(reservation);
 	}
 }
