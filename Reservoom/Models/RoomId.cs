@@ -10,7 +10,7 @@ public class RoomId {
 	}
 
 	public override string ToString() {
-		return $"{FloorNumber}{RoomNumber}";
+		return $"{FloorNumber}_{RoomNumber}";
 	}
 
 	public override bool Equals(object? obj) {

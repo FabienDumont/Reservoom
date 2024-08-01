@@ -5,9 +5,9 @@ using Reservoom.Models;
 namespace Reservoom.Services.ReservationCreators;
 
 public class DatabaseReservationCreator : IReservationCreator {
-	private readonly ReservoomDbContextFactory _dbContextFactory;
+	private readonly IReservoomDbContextFactory _dbContextFactory;
 
-	public DatabaseReservationCreator(ReservoomDbContextFactory dbContextFactory) {
+	public DatabaseReservationCreator(IReservoomDbContextFactory dbContextFactory) {
 		_dbContextFactory = dbContextFactory;
 	}
 	

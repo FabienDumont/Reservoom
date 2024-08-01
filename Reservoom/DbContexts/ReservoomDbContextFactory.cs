@@ -2,7 +2,7 @@
 
 namespace Reservoom.DbContexts;
 
-public class ReservoomDbContextFactory {
+public class ReservoomDbContextFactory : IReservoomDbContextFactory {
 	private readonly string _connectionString;
 
 	public ReservoomDbContextFactory(string connectionString) {

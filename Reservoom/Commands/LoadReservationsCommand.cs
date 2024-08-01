@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using MVVMEssentials.Commands;
+﻿using MVVMEssentials.Commands;
 using Reservoom.Stores;
 using Reservoom.ViewModels;
 
