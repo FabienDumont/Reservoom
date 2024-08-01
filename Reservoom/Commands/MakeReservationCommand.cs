@@ -1,11 +1,9 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Navigation;
 using MVVMEssentials.Commands;
 using MVVMEssentials.Services;
 using Reservoom.Exceptions;
 using Reservoom.Models;
-using Reservoom.Services;
 using Reservoom.Stores;
 using Reservoom.ViewModels;
 

@@ -1,13 +1,9 @@
-﻿using System.Configuration;
-using System.Data;
-using System.Windows;
+﻿using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using MVVMEssentials.Services;
 using MVVMEssentials.Stores;
 using Reservoom.DbContexts;
-using Reservoom.Exceptions;
 using Reservoom.Models;
-using Reservoom.Services;
 using Reservoom.Services.ReservationConflictValidator;
 using Reservoom.Services.ReservationCreators;
 using Reservoom.Services.ReservationProviders;

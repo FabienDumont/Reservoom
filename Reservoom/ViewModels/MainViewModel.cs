@@ -1,7 +1,5 @@
 ﻿using MVVMEssentials.Stores;
 using MVVMEssentials.ViewModels;
-using Reservoom.Models;
-using Reservoom.Stores;
 
 namespace Reservoom.ViewModels;
 

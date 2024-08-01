@@ -1,12 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using System.Windows.Navigation;
 using MVVMEssentials.Commands;
 using MVVMEssentials.Services;
 using MVVMEssentials.ViewModels;
 using Reservoom.Commands;
 using Reservoom.Models;
-using Reservoom.Services;
 using Reservoom.Stores;
 
 namespace Reservoom.ViewModels;
@@ -16,6 +14,20 @@ public class ReservationListingViewModel : BaseVm {
 	
 	private readonly ObservableCollection<ReservationViewModel> _reservations;
 	public IEnumerable<ReservationViewModel> Reservations => _reservations;
+
+	private string _errorMessage;
+
+	public string ErrorMessage {
+		get => _errorMessage;
+		set {
+			_errorMessage = value;
+			OnPropertyChanged();
+			
+			OnPropertyChanged(nameof(HasErrorMessage));
+		}
+	}
+
+	public bool HasErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
 
 	private bool _isLoading;
 

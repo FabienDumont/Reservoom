@@ -8,7 +8,7 @@
         xmlns:vms="clr-namespace:Reservoom.ViewModels"
         mc:Ignorable="d"
         Title="Reservoom" FontSize="14" Height="450" Width="800">
-    <ScrollViewer>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="20 10" MaxWidth="600">
             <Grid.Resources>
                 <DataTemplate DataType="{x:Type vms:MakeReservationViewModel}">
